@@ -6,8 +6,10 @@ CONFIG -= qt
 SOURCES += \
         estacion.cpp \
         funciones.cpp \
+        linea.cpp \
         main.cpp
 
 HEADERS += \
     estacion.h \
-    funciones.h
+    funciones.h \
+    linea.h
