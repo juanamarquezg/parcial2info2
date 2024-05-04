@@ -118,18 +118,45 @@ linea linea::crearLinea() {
     for (int i = 0; i < numEstaciones; ++i) {
         string nombreEstacion;
         int tiempoAnterior, tiempoSiguiente;
+        if (i==0){
+            cout << "Ingrese el nombre de la estacion " << i+1 << ": ";
+            cin.ignore();
+            getline(cin, nombreEstacion);
 
-        cout << "Ingrese el nombre de la estacion " << i+1 << ": ";
-        cin.ignore();
-        getline(cin, nombreEstacion);
+            tiempoAnterior = 0;
 
-        cout << "Ingrese el tiempo anterior de la estacion " << nombreEstacion << ": ";
-        cin >> tiempoAnterior;
+            cout << "Ingrese el tiempo siguiente de la estacion " << nombreEstacion << ": ";
+            cin >> tiempoSiguiente;
 
-        cout << "Ingrese el tiempo siguiente de la estacion " << nombreEstacion << ": ";
-        cin >> tiempoSiguiente;
+            estaciones[i] = new Estacion(tiempoAnterior, tiempoSiguiente, nombreEstacion);
 
-        estaciones[i] = new Estacion(tiempoAnterior, tiempoSiguiente, nombreEstacion);
+        }
+        else if(i== numEstaciones -1){
+            cout << "Ingrese el nombre de la estacion " << i+1 << ": ";
+            cin.ignore();
+            getline(cin, nombreEstacion);
+
+            tiempoAnterior= tiempoSiguiente;
+
+            tiempoSiguiente = 0;
+
+            estaciones[i] = new Estacion(tiempoAnterior, tiempoSiguiente, nombreEstacion);
+
+        }
+        else{
+            cout << "Ingrese el nombre de la estacion " << i+1 << ": ";
+            cin.ignore();
+            getline(cin, nombreEstacion);
+
+
+            tiempoAnterior = tiempoSiguiente;
+
+            cout << "Ingrese el tiempo siguiente de la estacion " << nombreEstacion << ": ";
+            cin >> tiempoSiguiente;
+
+            estaciones[i] = new Estacion(tiempoAnterior, tiempoSiguiente, nombreEstacion);
+        }
+
     }
 
     linea nuevaLinea(estaciones, nombreLinea, estacionTransferencia, numEstaciones, numEstaciones);
