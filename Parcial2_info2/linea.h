@@ -23,6 +23,13 @@ public:
     void eliminarEstacion(const string& nombreEstacion);
 
     static linea crearLinea();
+     static linea crearLinea(const linea& lineaAnterior);
+
+public:
+    // Declaración de la función seleccionarEstacionTransferencia
+    static Estacion seleccionarEstacionTransferencia(const linea& lineaAnterior);
+
+
 };
 
 #endif // LINEA_H
