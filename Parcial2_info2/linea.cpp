@@ -8,6 +8,7 @@ using namespace std;
 linea::linea(Estacion** _estaciones, string NombreLin, Estacion EstTransferencia, int NumEstaciones, int MaxCapacidad)
     : Estaciones(_estaciones), NombreLinea(NombreLin), EstacionTransferencia(EstTransferencia), ContadorEstaciones(NumEstaciones), Capacidad(MaxCapacidad) {}
 
+
 linea::~linea() {
     for (int i = 0; i < ContadorEstaciones; ++i) {
         delete Estaciones[i];
@@ -161,6 +162,18 @@ linea linea::crearLinea() {
 
     linea nuevaLinea(estaciones, nombreLinea, estacionTransferencia, numEstaciones, numEstaciones);
     return nuevaLinea;
+}
+
+void linea::seleccionarEstacionTransferencia(const string& nombreEstacion) {
+    for (int i = 0; i < ContadorEstaciones; ++i) {
+        if (Estaciones[i]->getNombre() == nombreEstacion) {
+            Estaciones[i]->setNombre(NombreLinea);
+            EstacionTransferencia = *Estaciones[i];
+            cout << "La estacion " << nombreEstacion << " ha sido marcada como estacion de transferencia de la linea " << NombreLinea << "." << endl;
+            return;
+        }
+    }
+    cout << "No se encontró ninguna estación con el nombre dado en la línea." << endl;
 }
 
 
