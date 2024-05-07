@@ -2,6 +2,8 @@
 using namespace std;
 #include <string>
 #include <estacion.h>
+#include <globals.h>
+
 
 // void MenuPrincipal (){
 //     bool verificador, flag = false;

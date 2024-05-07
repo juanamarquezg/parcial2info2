@@ -1,10 +1,11 @@
 #include "estacion.h"
 #include <string>
+#include <globals.h>
 using namespace std;
 
 
-Estacion::Estacion(int anterior, int siguiente, string nombre)
-    : tiempo_anterior(anterior), tiempo_siguiente(siguiente), nombre(nombre) {}
+Estacion::Estacion(int anterior, int siguiente, string _nombre, bool esttransferencia)
+    : tiempo_anterior(anterior), tiempo_siguiente(siguiente), nombre(_nombre), transferencia(esttransferencia) {}
 
 
 Estacion::~Estacion() {}
@@ -31,4 +32,10 @@ string Estacion::getNombre() const {
 
 void Estacion::setNombre(string nombre) {
     this->nombre = nombre;
+}
+bool Estacion::getTransferencia() const {
+    return transferencia;
+}
+void Estacion::setTransferencia(bool esttransferencia){
+    transferencia = esttransferencia;
 }
