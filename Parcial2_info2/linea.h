@@ -16,11 +16,11 @@ private:
 public:
     linea();
     linea(Estacion** _estaciones, string NombreLin, int NumEstaciones, int MaxCapacidad);
-    static linea crearLinea(linea** ptrDoblePunteroLinea);
+//    static linea crearLinea(linea** ptrDoblePunteroLinea);
 //    ~linea();
 
     void mostrarLinea() const;
-    //static linea crearLinea();
+    static linea crearLinea();
     void agregarEstacion(const Estacion& nuevaEstacion, int indice);
     void eliminarEstacion(const string& nombreEstacion);
 

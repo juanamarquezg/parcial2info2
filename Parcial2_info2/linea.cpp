@@ -6,7 +6,7 @@ using namespace std;
 #include <iostream>
 #include <funciones.h>
 
-linea::linea() : Estaciones(nullptr), NombreLinea("desconocido"), ContadorEstaciones(0), Capacidad(0) {}
+linea::linea() : Estaciones(nullptr), NombreLinea(""), ContadorEstaciones(0), Capacidad(0) {}
 linea::linea(Estacion** _estaciones, string NombreLin, int NumEstaciones, int MaxCapacidad)
     : Estaciones(_estaciones), NombreLinea(NombreLin), ContadorEstaciones(NumEstaciones), Capacidad(MaxCapacidad) {}
  // constructor por defecto( para crear arreglos)
@@ -106,7 +106,7 @@ void linea::eliminarEstacion(const string& nombreEstacion) {
     }
 }
 
-linea linea::crearLinea(linea** DoblePuntero) {
+linea linea::crearLinea() {
     int numEstaciones;
     cout << "Ingrese el numero de estaciones para la linea: ";
     cin >> numEstaciones;
@@ -121,12 +121,18 @@ linea linea::crearLinea(linea** DoblePuntero) {
             string nombreEstacion;
             int tiempoAnterior, tiempoSiguiente;
             if (i==0){
-                for(int j=0; j<variableGlobal; j++){
-                    LasLineas = DoblePuntero[j];
-                    Estacion** estacionesDeLasLineas = LasLineas.getEstaciones();
-                    LasLineas.mostrarLinea();
-                }
-                cout << "Ingrese el nombre de la estacion trasnferencia " << i+1 << ": ";
+                cout << "Lineas existentes y sus estaciones:" << endl;
+
+//                for (int j = 0; j < variableGlobal; j++) {
+//                    linea* lineaExistente = DoblePuntero[j];
+//                    lineaExistente->mostrarLinea();
+//                }
+//                for(int j=0; j<variableGlobal; j++){
+//                    LasLineas = DoblePuntero[j];
+//                    Estacion** estacionesDeLasLineas = LasLineas.getEstaciones();
+//                    LasLineas.mostrarLinea();
+//                }
+                cout <<endl<< "Ingrese el nombre de la estacion trasnferencia " << i+1 << ": ";
                 cin.ignore();
                 getline(cin, nombreEstacion);
 
