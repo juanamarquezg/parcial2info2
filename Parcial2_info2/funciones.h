@@ -5,8 +5,8 @@
 using namespace std;
 
 void MenuPrincipal ();
-
-
+void cambiarContadorGlobal(int nuevoValor);
+void cambiarVariableGlobal(int nuevoValor);
 
 
 
