@@ -105,6 +105,42 @@ void linea::eliminarEstacion(const string& nombreEstacion) {
         cout << "No se encontro la estacion con el nombre dado." << endl;
     }
 }
+int linea::calcularTiempoEntreEstaciones(const string& nombreEstacionInicio, const string& nombreEstacionFin) const {
+    int tiempoTotal = 0;
+    bool encontradaInicio = false;
+    bool encontradaFin = false;
+
+    for (int i = 0; i < ContadorEstaciones; ++i) {
+        if (Estaciones[i]->getNombre() == nombreEstacionInicio) {
+            encontradaInicio = true;
+        }
+
+        if (encontradaInicio) {
+            tiempoTotal += Estaciones[i]->getTiempoAnterior();
+        }
+
+        if (Estaciones[i]->getNombre() == nombreEstacionFin) {
+            encontradaFin = true;
+            break;
+        }
+
+        if (!encontradaInicio) {
+            tiempoTotal += Estaciones[i]->getTiempoSiguiente();
+        }
+    }
+
+    if (!encontradaInicio) {
+        cout << "La estacion de inicio no se encontro en la linea." << endl;
+        return -1;
+    }
+
+    if (!encontradaFin) {
+        cout << "La estacion de fin no se encontro en la linea después de la estacion de inicio." << endl;
+        return -1;
+    }
+
+    return tiempoTotal;
+}
 
 linea linea::crearLinea() {
     int numEstaciones;

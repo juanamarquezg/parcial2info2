@@ -31,6 +31,8 @@ public:
     // Declaración de la función seleccionarEstacionTransferencia
    void seleccionarEstacionTransferencia(const string& nombreEstacion);
 
+   int calcularTiempoEntreEstaciones(const string& nombreEstacionInicio, const string& nombreEstacionFin) const;
+
 };
 
 #endif // LINEA_H
