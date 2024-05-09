@@ -16,22 +16,18 @@ private:
 public:
     linea();
     linea(Estacion** _estaciones, string NombreLin, int NumEstaciones, int MaxCapacidad);
-//    static linea crearLinea(linea** ptrDoblePunteroLinea);
 //    ~linea();
 
     void mostrarLinea() const;
     static linea crearLinea();
     void agregarEstacion(const Estacion& nuevaEstacion, int indice);
     void eliminarEstacion(const string& nombreEstacion);
-
+    int getContadorEstaciones()const;
     void setEstaciones(Estacion** _estaciones);
     Estacion**getEstaciones() const;
-
-    /*static linea crearLinea(const linea& lineaAnterior, const string& nombreEstacionTransferencia);*///xd
-    // Declaración de la función seleccionarEstacionTransferencia
-   void seleccionarEstacionTransferencia(const string& nombreEstacion);
-
-   int calcularTiempoEntreEstaciones(const string& nombreEstacionInicio, const string& nombreEstacionFin) const;
+    void seleccionarEstacionTransferencia(const string& nombreEstacion);
+    string getNombreLinea() const;
+    int calcularTiempoEntreEstaciones(const string& nombreEstacionInicio, const string& nombreEstacionFin) const;
 
 };
 

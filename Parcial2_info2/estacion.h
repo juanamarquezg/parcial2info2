@@ -12,6 +12,7 @@ private:
     bool transferencia;
 
 public:
+    Estacion();
     Estacion(int anterior, int siguiente, string nombre,bool esttransferencia);
 
     ~Estacion();

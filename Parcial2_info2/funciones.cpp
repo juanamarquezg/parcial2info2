@@ -12,6 +12,19 @@ void cambiarVariableGlobal(int nuevoValor) {
 void cambiarContadorGlobal(int nuevoValor) {
     contadorGlobal = nuevoValor;
 }
+bool buscarEstacionEnLinea(const linea& unaLinea, const string& nombreEstacion) {
+    Estacion** estaciones = unaLinea.getEstaciones();
+    int numEstaciones = unaLinea.getContadorEstaciones();
+
+    for (int i = 0; i < numEstaciones; ++i) {
+        if (estaciones[i]->getNombre() == nombreEstacion) {
+            return true;
+        }
+    }
+
+    cout << "La estacion " << nombreEstacion << " no pertenece a la linea " << unaLinea.getNombreLinea() << "." << endl;
+    return false;
+}
 void MenuPrincipal (){
     linea miLinea;
     miLinea = miLinea.crearLinea();
@@ -20,6 +33,7 @@ void MenuPrincipal (){
     int numLineas = 1; // Contador para el número actual de líneas en el arreglo
     Arreglo[0] = miLinea;
     Arreglo[0].mostrarLinea();
+
 
     int decision;
     bool flag = false;
@@ -31,7 +45,7 @@ void MenuPrincipal (){
         cout << "4: eliminar estaciones de una linea"<<endl;
         cout << "5: saber cuantas estaciones tiene la red metro"<<endl;
         cout << "6: saber cuantas lineas tiene la red metro"<<endl;
-        cout << "7: averiguar si una estación pertenece a una linea"<<endl;
+        cout << "7: averiguar si una estacion pertenece a una linea"<<endl;
         cout << "8: saber cuantas estaciones tiene una linea"<<endl;
         cout << "9: para calcular el tiempo entre estaciones" << endl;
         cout << "10: para mostrar todas las lineas" <<endl;
@@ -40,8 +54,49 @@ void MenuPrincipal (){
 
         switch(decision){
         case 1: {
-            // Crear una nueva línea
+
             linea nuevaLinea = miLinea.crearLinea();
+            int k ;
+
+            // Mostrar las líneas existentes y sus estaciones
+            cout << "Lineas existentes y sus estaciones:" << endl;
+            for (int j = 0; j < numLineas; j++) {
+                cout << "Linea " << j + 1 << ":" << endl;
+                Arreglo[j].mostrarLinea();
+            }
+
+            // El usuario elige una línea existente para seleccionar una estación como estación de transferencia
+            int seleccionLineaTransferencia;
+            cout << "Seleccione la linea de la cual desea seleccionar una estacion como estacion de transferencia (1-" << numLineas << "): ";
+            cin >> seleccionLineaTransferencia;
+
+            if (seleccionLineaTransferencia >= 1 && seleccionLineaTransferencia <= numLineas) {
+            string estacionTransferencia;
+            cout << "Ingrese el nombre de la estacion que desea agregar como primera estacion de la nueva linea: ";
+            cin.ignore();
+            getline(cin, estacionTransferencia);
+
+            // Verificar si la estación seleccionada existe en la línea seleccionada
+            bool encontrada = false;
+            for (int i = 0; i < Arreglo[seleccionLineaTransferencia - 1].getContadorEstaciones(); ++i) {
+                if (Arreglo[seleccionLineaTransferencia - 1].getEstaciones()[i]->getNombre() == estacionTransferencia) {
+                    encontrada = true;
+                    k = i ;
+               break;
+            }
+            }
+
+            if (encontrada) {
+            // Agregar la estación seleccionada como primera estación en la nueva línea
+            nuevaLinea.agregarEstacion(*Arreglo[seleccionLineaTransferencia - 1].getEstaciones()[k], 0);
+
+            cout << "Estacion agregada como primera estacion de la nueva linea." << endl;
+            } else {
+            cout << "La estacion seleccionada no existe en la linea seleccionada." << endl;
+            }
+            } else {
+            cout << "Numero de linea no valido." << endl;
+            }
 
             // Agregar la nueva línea al arreglo de líneas
             Arreglo[numLineas] = nuevaLinea;
@@ -50,9 +105,138 @@ void MenuPrincipal (){
             numLineas++;
 
             // Mostrar la nueva línea
-            cout << "Nueva línea agregada:" << endl;
+            cout << "Nueva linea agregada:" << endl;
             nuevaLinea.mostrarLinea();
+            }
+        break;
+        case 2: { // Opción para eliminar una línea
+            if (numLineas == 1) {
+                cout << "La linea " << Arreglo[0].getNombreLinea() << " ha sido eliminada." << endl;
+                numLineas = 0; // Establecer el contador de líneas en cero
+                cambiarContadorGlobal(0);
+                break; // Salir del bucle principal
+            } else {
+                cout << "No se puede eliminar mas lineas. Debe haber al menos una linea en la red de metro." << endl;
+            }
         }
+        break;
+        case 4: {
+        // Eliminar una estación de una línea existente
+        cambiarContadorGlobal(contadorGlobal -1);
+        if (numLineas == 0) {
+            cout << "No hay lineas disponibles para eliminar una estacion." << endl;
+        } else {
+            for (int j = 0; j < numLineas; j++) {
+                cout << "Linea " << j + 1 << ":" << endl;
+                Arreglo[j].mostrarLinea();
+            }
+            int seleccionLinea;
+            cout << "Seleccione la linea de la cual desea eliminar una estacion (1-" << numLineas << "): ";
+            cin >> seleccionLinea;
+
+
+            if (seleccionLinea >= 1 && seleccionLinea <= numLineas) {
+
+                string nombreEstacion;
+                cout << "Ingrese el nombre de la estacion que desea eliminar: ";
+                cin.ignore();
+                getline(cin, nombreEstacion);
+
+                Arreglo[seleccionLinea - 1].eliminarEstacion(nombreEstacion);
+            } else {
+                cout << "Numero de linea no valido." << endl;
+                }
+            }
+        }
+        break;
+
+        case 3: {
+        // Agregar una estación a una línea existente
+
+            if (numLineas == 0) {
+                cout << "No hay lineas disponibles para agregar una estacion." << endl;
+            }
+            else {
+                int seleccionLinea;
+                cout << "Seleccione la linea a la cual desea agregar una estacion (1-" << numLineas << "): ";
+                cin >> seleccionLinea;
+
+                    if (seleccionLinea >= 1 && seleccionLinea <= numLineas) {
+                        Estacion nuevaEstacion;
+                        int tiempoAnterior,tiempoSiguiente;
+                        string nombreEstacion;
+                        cout << "Ingrese el nombre de la nueva estacion: ";
+                        cin.ignore();
+                        getline(cin, nombreEstacion);
+                        cout << "Ingrese el tiempo anterior de la estacion " << nombreEstacion << ": ";
+                        cin >> tiempoAnterior;
+                        cout << "Ingrese el tiempo siguiente de la estacion " << nombreEstacion << ": ";
+                        cin >> tiempoSiguiente;
+                        nuevaEstacion = Estacion(tiempoAnterior, tiempoSiguiente, nombreEstacion, false);
+                        Arreglo[seleccionLinea-1].mostrarLinea();
+
+                        int posicion;
+                        cout << "Ingrese la posicion donde desea agregar la estacion: ";
+                        cin >> posicion;
+                        posicion--;
+
+                        // Aquí podrías solicitar al usuario los detalles de la nueva estación
+                        // Luego llamar a la función agregarEstacion
+                        Arreglo[seleccionLinea - 1].agregarEstacion(nuevaEstacion,posicion);
+                        cambiarContadorGlobal(contadorGlobal+1);
+                    }
+                    else {
+                    cout << "Numero de linea no valido." << endl;
+                    }
+                }
+            }
+
+        break;
+
+
+        case 5:{
+            cout << endl << "El numero de estaciones en la red metro es:"<< contadorGlobal << endl ;
+
+        }
+        break;
+        case 6:{
+            cout << endl << "El numero de lineas en la red metro es:"<< numLineas << endl ;
+        }
+        break;
+        case 7: { // Opción para averiguar si una estación pertenece a una línea
+            string nombreEstacion;
+            cout << "Ingrese el nombre de la estacion que desea buscar: ";
+            cin.ignore();
+            getline(cin, nombreEstacion);
+
+            bool encontrada = false;
+            for (int i = 0; i < numLineas; ++i) {
+                if (buscarEstacionEnLinea(Arreglo[i], nombreEstacion)) {
+                    encontrada = true;
+                    cout << "La estacion " << nombreEstacion << " pertenece a la linea " << i+1 << "." << endl;
+                }
+            }
+            if (!encontrada) {
+                cout << "La estacion " << nombreEstacion << " no pertenece a ninguna linea." << endl;
+            }
+        }
+        break;
+
+        case 8: { // Opción para saber cuántas estaciones tiene una línea
+                if (numLineas == 0) {
+                    cout << "No hay lineas disponibles para mostrar." << endl;
+                } else {
+                    int seleccionLinea;
+                    cout << "Seleccione la linea para saber cuantas estaciones tiene (1-" << numLineas << "): ";
+                    cin >> seleccionLinea;
+
+                    if (seleccionLinea >= 1 && seleccionLinea <= numLineas) {
+                        cout << "La linea " << seleccionLinea << " tiene " << Arreglo[seleccionLinea - 1].getContadorEstaciones() << " estaciones." << endl;
+                    } else {
+                        cout << "Numero de linea no valido." << endl;
+                    }
+                }
+            }
         break;
 
         case 9: {
@@ -102,148 +286,3 @@ void MenuPrincipal (){
         }
     }
 }
-
-// void MenuPrincipal (){
-// //    cout << "Elija la opcion que quiere desarrollar:"<<endl<<"1: Agregar una linea"<< endl <<"2: eliminar una linea"<< endl<<"3: Agregar estaciones a una linea"<<endl<<"4: eliminar estaciones de una linea"<<endl<<"5: saber cuantas estaciones tiene la red metro"<<endl<<"6: saber cuantas lineas tiene la red metro"<<endl<<"7: averiguar si una estación pertenece a una linea"<<endl<<"8: saber cuantas estaciones tiene una linea"<<endl<<"9: para salirse"<<endl;SSS
-//     linea miLinea;
-//     miLinea = miLinea.crearLinea();
-//     // delcaracion de arreglos
-//     linea Arreglo[variableGlobal + 1];
-//     Arreglo[0] = miLinea;
-//     Arreglo[0].mostrarLinea();
-
-//     // Declaracion del arreglo lineas
-// //    linea **ArregloLineas = new linea*[variableGlobal];
-// //    ArregloLineas[0]= new linea(miLinea.crearLinea(nullptr));
-// //    ArregloLineas[0]->mostrarLinea();
-//     cambiarVariableGlobal(1);
-//     int decision,actualizador;
-//     actualizador = 1;
-// //    cout << "Elija la opcion que quiere desarrollar:"<<endl<<"1: Agregar una linea"<< endl <<"2: eliminar una linea"<< endl<<"3: Agregar estaciones a una linea"<<endl<<"4: eliminar estaciones de una linea"<<endl<<"5: saber cuantas estaciones tiene la red metro"<<endl<<"6: saber cuantas lineas tiene la red metro"<<endl<<"7: averiguar si una estación pertenece a una linea"<<endl<<"8: saber cuantas estaciones tiene una linea"<<endl<<"9: para salirse"<<endl;
-// //    cin >> decision ;
-//     bool flag = false; ;
-//     while (flag == false){
-//         cout << "Elija la opcion que quiere desarrollar:"<<endl<<"1: Agregar una linea"<< endl <<"2: eliminar una linea"<< endl<<"3: Agregar estaciones a una linea"<<endl<<"4: eliminar estaciones de una linea"<<endl<<"5: saber cuantas estaciones tiene la red metro"<<endl<<"6: saber cuantas lineas tiene la red metro"<<endl<<"7: averiguar si una estación pertenece a una linea"<<endl<<"8: saber cuantas estaciones tiene una linea"<<endl<<"9: para salirse"<<endl;
-//         cin >> decision ;
-//         switch(decision){
-//             case 1:/*{*/
-// //                linea Temporal1;
-// //                linea **ArregloLineasTemporal = new linea*[variableGlobal+1];
-// //                Temporal1 = Temporal1.crearLinea(ArregloLineasTemporal);
-// //                for (int i=0 ; i < variableGlobal+1; i++){
-// //                    ArregloLineasTemporal[i] = ArregloLineas[1];
-// //                }
-// //                ArregloLineasTemporal[variableGlobal]= new linea(Temporal1.crearLinea(ArregloLineas));
-// //                for (int i=0 ; i < variableGlobal+1; i++){
-// //                    delete ArregloLineas[1];
-// //                }
-// //            }
-
-// //             break;
-
-//             case 2:
-
-
-//             break;
-//             case 3:
-
-//             break;
-
-//             case 4:
-
-//             break;
-
-//             case 5:
-//             break;
-
-//             case 6:
-//             break;
-
-//             case 7:
-//             break;
-
-//             case 8:
-//             break;
-
-//             case 9:
-//             flag = true;
-//             break;
-
-//             default:
-//             cout << endl << "ingreso un valor incorrecto " <<endl ;
-
-//         }
-
-
-//     }
-// }
-    // borrado de memoria
-//    for(int i=0;i<variableGlobal;i++){
-//        delete ArregloLineas[i];
-//    }
-//    delete [] ArregloLineas;
-//}
-//     bool verificador, flag = false;
-//     int decision ;
-//     while (flag == false){
-//         cout << "Elija la opcion que quiere desarrollar:"<<endl<<"1: Agregar una linea"<< endl <<"2: eliminar una linea"<< endl<<"3: Agregar estaciones a una linea"<<endl<<"4: eliminar estaciones de una linea"<<endl<<"5: saber cuantas estaciones tiene la red metro"<<endl<<"6: saber cuantas lineas tiene la red metro"<<endl<<"7: averiguar si una estación pertenece a una linea"<<endl<<"8: saber cuantas estaciones tiene una linea"<<endl<<"9: para salirse"<<endl;
-//         cin >> decision ;
-//         switch(decision){
-//             case 1:
-//             // agregar linea tiene consigo la funcion de agregar estaciones, en caso de ser primera linea
-//             // no tiene estacion de transferencia
-
-//             break;
-//             case 2:
-
-//             break;
-//             case 3:
-
-//             break;
-
-//             case 4:
-
-//             break;
-
-//             case 5:
-//             break;
-
-//             case 6:
-//             break;
-
-//             case 7:
-//             break;
-
-//             case 8:
-//             break;
-
-//             case 9:
-//             flag = true;
-//             break;
-
-//         default:
-//             cout << endl << "ingreso un valor incorrecto " <<endl ;
-
-//         }
-
-//     int tiempo_anterior, tiempo_siguiente;
-//     string nombre_estacion;
-
-//     cout << "Ingrese el tiempo hacia la estacion anterior: ";
-//     cin >> tiempo_anterior;
-
-//     cout << "Ingrese el tiempo hacia la estacion siguiente: ";
-//     cin >> tiempo_siguiente;
-
-//     cout << "Ingrese el nombre de la estacion: ";
-//     cin.ignore();
-//     getline(cin, nombre_estacion);
-
-//     Estacion estacion(tiempo_anterior, tiempo_siguiente, nombre_estacion);
-
-//     cout << "Nombre de la estacion: " << estacion.getNombre() << endl;
-//     cout << "Tiempo anterior: " << estacion.getTiempoAnterior() << endl;
-//     cout << "Tiempo siguiente: " << estacion.getTiempoSiguiente() << endl;
-//     }
-
-// }

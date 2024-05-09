@@ -3,7 +3,7 @@
 #include <globals.h>
 using namespace std;
 
-
+Estacion:: Estacion() : tiempo_anterior(0), tiempo_siguiente(0),nombre("desconocido"), transferencia (NULL) {}
 Estacion::Estacion(int anterior, int siguiente, string _nombre, bool esttransferencia)
     : tiempo_anterior(anterior), tiempo_siguiente(siguiente), nombre(_nombre), transferencia(esttransferencia) {}
 

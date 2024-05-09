@@ -146,122 +146,61 @@ linea linea::crearLinea() {
     int numEstaciones;
     cout << "Ingrese el numero de estaciones para la linea: ";
     cin >> numEstaciones;
+    cambiarContadorGlobal(contadorGlobal+numEstaciones);
     Estacion** estaciones = new Estacion*[numEstaciones];
     linea LasLineas;
     string nombreLinea;
     cout << "Ingrese el nombre de la linea: ";
     cin.ignore();
     getline(cin, nombreLinea);
-    if (variableGlobal != 0){
-        for (int i = 0; i < numEstaciones; ++i) {
-            string nombreEstacion;
-            int tiempoAnterior, tiempoSiguiente;
-            if (i==0){
-                cout << "Lineas existentes y sus estaciones:" << endl;
+    for (int i = 0; i < numEstaciones; ++i) {
+        string nombreEstacion;
+        int tiempoAnterior, tiempoSiguiente;
+        if (i==0){
+            cout << "Ingrese el nombre de la estacion " << i+1 << ": ";
+            cin.ignore();
+            getline(cin, nombreEstacion);
 
-//                for (int j = 0; j < variableGlobal; j++) {
-//                    linea* lineaExistente = DoblePuntero[j];
-//                    lineaExistente->mostrarLinea();
-//                }
-//                for(int j=0; j<variableGlobal; j++){
-//                    LasLineas = DoblePuntero[j];
-//                    Estacion** estacionesDeLasLineas = LasLineas.getEstaciones();
-//                    LasLineas.mostrarLinea();
-//                }
-                cout <<endl<< "Ingrese el nombre de la estacion trasnferencia " << i+1 << ": ";
-                cin.ignore();
-                getline(cin, nombreEstacion);
+            tiempoAnterior = 0;
 
-                tiempoAnterior = 0;
+            cout << "Ingrese el tiempo siguiente de la estacion " << nombreEstacion << ": ";
+            cin >> tiempoSiguiente;
 
-                cout << "Ingrese el tiempo siguiente de la estacion " << nombreEstacion << ": ";
-                cin >> tiempoSiguiente;
+            estaciones[i] = new Estacion(tiempoAnterior, tiempoSiguiente, nombreEstacion, false);
+        }
+        else if(i== numEstaciones -1){
+            cout << "Ingrese el nombre de la estacion " << i+1 << ": ";
+            cin.ignore();
+            getline(cin, nombreEstacion);
 
-                estaciones[i] = new Estacion(tiempoAnterior, tiempoSiguiente, nombreEstacion, false);
-                cambiarContadorGlobal(contadorGlobal+1);
+            tiempoAnterior= tiempoSiguiente;
 
-            }
-            else if(i== numEstaciones -1){
-                cout << "Ingrese el nombre de la estacion " << i+1 << ": ";
-                cin.ignore();
-                getline(cin, nombreEstacion);
+            tiempoSiguiente = 0;
 
-                tiempoAnterior= tiempoSiguiente;
-
-                tiempoSiguiente = 0;
-
-                estaciones[i] = new Estacion(tiempoAnterior, tiempoSiguiente, nombreEstacion, false);
-                cambiarContadorGlobal(contadorGlobal+1);
-
-            }
-            else{
-                cout << "Ingrese el nombre de la estacion " << i+1 << ": ";
-                cin.ignore();
-                getline(cin, nombreEstacion);
-
-
-                tiempoAnterior = tiempoSiguiente;
-
-                cout << "Ingrese el tiempo siguiente de la estacion " << nombreEstacion << ": ";
-                cin >> tiempoSiguiente;
-
-                estaciones[i] = new Estacion(tiempoAnterior, tiempoSiguiente, nombreEstacion, false);
-                cambiarContadorGlobal(contadorGlobal+1);
-            }
+            estaciones[i] = new Estacion(tiempoAnterior, tiempoSiguiente, nombreEstacion, false);
 
         }
-        linea nuevaLinea(estaciones, nombreLinea, numEstaciones, numEstaciones);
-        return nuevaLinea;
-    }
-    else{
-        for (int i = 0; i < numEstaciones; ++i) {
-            string nombreEstacion;
-            int tiempoAnterior, tiempoSiguiente;
-            if (i==0){
-                cout << "Ingrese el nombre de la estacion " << i+1 << ": ";
-                cin.ignore();
-                getline(cin, nombreEstacion);
-
-                tiempoAnterior = 0;
-
-                cout << "Ingrese el tiempo siguiente de la estacion " << nombreEstacion << ": ";
-                cin >> tiempoSiguiente;
-
-                estaciones[i] = new Estacion(tiempoAnterior, tiempoSiguiente, nombreEstacion, false);
-
-            }
-            else if(i== numEstaciones -1){
-                cout << "Ingrese el nombre de la estacion " << i+1 << ": ";
-                cin.ignore();
-                getline(cin, nombreEstacion);
-
-                tiempoAnterior= tiempoSiguiente;
-
-                tiempoSiguiente = 0;
-
-                estaciones[i] = new Estacion(tiempoAnterior, tiempoSiguiente, nombreEstacion, false);
-
-            }
-            else{
-                cout << "Ingrese el nombre de la estacion " << i+1 << ": ";
-                cin.ignore();
-                getline(cin, nombreEstacion);
+        else{
+            cout << "Ingrese el nombre de la estacion " << i+1 << ": ";
+            cin.ignore();
+            getline(cin, nombreEstacion);
 
 
-                tiempoAnterior = tiempoSiguiente;
+            tiempoAnterior = tiempoSiguiente;
 
-                cout << "Ingrese el tiempo siguiente de la estacion " << nombreEstacion << ": ";
-                cin >> tiempoSiguiente;
+            cout << "Ingrese el tiempo siguiente de la estacion " << nombreEstacion << ": ";
+            cin >> tiempoSiguiente;
 
-                estaciones[i] = new Estacion(tiempoAnterior, tiempoSiguiente, nombreEstacion, false);
-            }
+            estaciones[i] = new Estacion(tiempoAnterior, tiempoSiguiente, nombreEstacion, false);
 
         }
-        linea nuevaLinea(estaciones, nombreLinea, numEstaciones, numEstaciones);
-        return nuevaLinea;
 
     }
+    linea nuevaLinea(estaciones, nombreLinea, numEstaciones, numEstaciones);
+    return nuevaLinea;
+
 }
+
 
 void linea::seleccionarEstacionTransferencia(const string& nombreEstacion) {
     for (int i = 0; i < ContadorEstaciones; ++i) {
@@ -281,30 +220,12 @@ Estacion** linea::getEstaciones() const {
 void linea::setEstaciones(Estacion** _estaciones) {
     Estaciones = _estaciones;
 }
-//int linea::getTiempoAnterior() const {
-//    return tiempo_anterior;
-//}
+int linea::getContadorEstaciones() const {
+    return ContadorEstaciones;
+}
 
-//void linea::setTiempoAnterior(int anterior) {
-//    tiempo_anterior = anterior;
-//}
-
-//int Estacion::getTiempoSiguiente() const {
-//    return tiempo_siguiente;
-//}
-
-//void Estacion::setTiempoSiguiente(int siguiente) {
-//    tiempo_siguiente = siguiente;
-//}
-
-//string Estacion::getNombre() const {
-//    return nombre;
-//}
-
-//void Estacion::setNombre(string nombre) {
-//    this->nombre = nombre;
-//}
-
-
+string linea::getNombreLinea() const {
+        return NombreLinea;
+}
 
 
